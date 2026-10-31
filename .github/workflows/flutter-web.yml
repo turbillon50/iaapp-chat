@@ -1,0 +1,34 @@
+name: IA.app CHAT — Flutter web build
+on:
+  push:
+    branches: [main, work/fluffychat-upstream]
+    paths: [client/**, .github/workflows/flutter-web.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Flutter version
+        run: flutter --version
+      - name: Resolve packages
+        working-directory: client
+        run: flutter pub get
+      - name: Build actual Flutter web app
+        working-directory: client
+        run: flutter build web --release --base-href /iaapp/
+      - name: Verify output
+        run: test -f client/build/web/index.html && test -f client/build/web/flutter_bootstrap.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iaapp-chat-flutter-web
+          path: client/build/web/
+          if-no-files-found: error
+          retention-days: 7
