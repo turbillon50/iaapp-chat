@@ -1,0 +1,9 @@
+{
+  "applicationName": "IA.app CHAT",
+  "defaultHomeserver": "chat.iaapp.live",
+  "colorSchemeSeedInt": 4290427578,
+  "website": "https://iaapp.live",
+  "welcomeText": "",
+  "presetHomeserver": "chat.iaapp.live",
+  "enableMatrixNativeOIDC": false
+}
