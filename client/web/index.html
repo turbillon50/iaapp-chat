@@ -1,63 +1,74 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="The cutest messenger in the Matrix network.">
-
-  <!-- iOS meta tags & icons -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="IA.app CHAT. Personas e inteligencias en una misma conversación.">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="FluffyChat">
+  <meta name="apple-mobile-web-app-title" content="IA.app CHAT">
+  <meta name="theme-color" content="#000000">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="icons/Icon-32.png">
   <link rel="icon" type="image/png" sizes="48x48" href="icons/Icon-48.png">
-
-  <title>FluffyChat</title>
   <link rel="manifest" href="manifest.json">
+  <title>IA.app CHAT</title>
+  <style>
+    html,body {margin:0;min-height:100%;background:#000;color:#f9f9f9;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
+    #iaapp-intro {position:fixed;inset:0;z-index:1000;background:#000;display:block;transition:opacity .28s ease;overflow:hidden}
+    #iaapp-intro.dismissed {opacity:0;pointer-events:none}
+    #iaapp-brand {position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;text-align:center;white-space:nowrap}
+    #iaapp-triangle {width:47px;height:42px;background:#f9f9f9;clip-path:polygon(0 0,100% 0,50% 100%);margin-bottom:11px}
+    #iaapp-wordmark {font-size:35px;font-weight:300;line-height:1.22;letter-spacing:.13em;padding-left:.13em}
+    #iaapp-chatline {display:flex;align-items:center;gap:12px;margin-top:11px}
+    #iaapp-chatline span {display:block;width:23px;height:1px;background:#bcbcbc;opacity:.75}
+    #iaapp-chatline b {font-size:10px;letter-spacing:.45em;padding-left:.45em;font-weight:400;color:#dedede}
+    #iaapp-enter {position:absolute;bottom:max(7%,calc(30px + env(safe-area-inset-bottom)));left:50%;transform:translateX(-50%);border:0;background:transparent;color:#c6c6c6;font:400 10px -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;letter-spacing:.29em;white-space:nowrap;padding:18px 14px;cursor:pointer}
+    #iaapp-enter:focus-visible {outline:2px solid #eee;outline-offset:4px;border-radius:4px}
+    #iaapp-status {position:absolute;bottom:max(3%,env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:11px;color:#9f9f9f;min-height:16px}
+    @media(prefers-reduced-motion:reduce){#iaapp-intro{transition:none}}
+  </style>
   <script src="Imaging.js"></script>
-
-  <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
-
 <body>
+  <section id="iaapp-intro" aria-label="Bienvenido a IA.app CHAT">
+    <div id="iaapp-brand" aria-hidden="true">
+      <div id="iaapp-triangle"></div>
+      <div id="iaapp-wordmark">IA.app</div>
+      <div id="iaapp-chatline"><span></span><b>CHAT</b><span></span></div>
+    </div>
+    <button id="iaapp-enter" type="button">TOCA PARA COMENZAR</button>
+    <div id="iaapp-status" role="status" aria-live="polite"></div>
+  </section>
   <script>
-    window.addEventListener('load', function (ev) {
+    const intro = document.getElementById('iaapp-intro');
+    const enter = document.getElementById('iaapp-enter');
+    const status = document.getElementById('iaapp-status');
+    let ready = false, requested = false;
+    const dismiss = () => {
+      if (!ready) { requested = true; status.textContent = 'Preparando tu conversación…'; return; }
+      intro.classList.add('dismissed');
+      window.setTimeout(() => { intro.remove(); }, 300);
+    };
+    enter.addEventListener('click', dismiss);
+    window.addEventListener('load', function () {
       {{flutter_js}}
       {{flutter_build_config}}
-
       _flutter.loader.load({
-        serviceWorker: {
-          serviceWorkerVersion: {{flutter_service_worker_version}},
-        },
-      onEntrypointLoaded: function (engineInitializer) {
-        engineInitializer.initializeEngine({ useColorEmoji: true }).then(function (appRunner) {
-          appRunner.runApp();
-        });
-      }
+        serviceWorker: {serviceWorkerVersion: {{flutter_service_worker_version}}},
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine({useColorEmoji: true})
+            .then(function(appRunner){return appRunner.runApp();})
+            .then(function(){ready = true; if (requested) dismiss();})
+            .catch(function(){status.textContent = 'No se pudo iniciar. Vuelve a abrir IA.app.';});
+        }
       });
     });
   </script>
 </body>
-
 </html>
