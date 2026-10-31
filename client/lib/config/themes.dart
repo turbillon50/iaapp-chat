@@ -45,11 +45,29 @@ abstract class FluffyThemes {
     Brightness brightness, [
     Color? seed,
   ]) {
-    final colorScheme = ColorScheme.fromSeed(
+    final generatedScheme = ColorScheme.fromSeed(
       brightness: brightness,
-      seedColor: seed ?? Color(AppSettings.colorSchemeSeedInt.value),
-      dynamicSchemeVariant: DynamicSchemeVariant.rainbow,
+      seedColor: seed ?? const Color(0xFFEDEDED),
+      dynamicSchemeVariant: DynamicSchemeVariant.monochrome,
     );
+    // IA.app: a functional black/pearl theme, not a separate mock UI.
+    // Keep light mode available as a user-selectable option.
+    final colorScheme = brightness == Brightness.dark
+        ? generatedScheme.copyWith(
+            primary: const Color(0xFFF1F1F1),
+            onPrimary: Colors.black,
+            secondary: const Color(0xFFCCCCCC),
+            onSecondary: Colors.black,
+            surface: Colors.black,
+            onSurface: const Color(0xFFF7F7F7),
+            surfaceContainerLowest: Colors.black,
+            surfaceContainerLow: const Color(0xFF0C0C0C),
+            surfaceContainer: const Color(0xFF141414),
+            surfaceContainerHigh: const Color(0xFF1D1D1D),
+            surfaceContainerHighest: const Color(0xFF272727),
+            outline: const Color(0xFF4A4A4A),
+          )
+        : generatedScheme;
     final isColumnMode = FluffyThemes.isColumnMode(context);
     final dividerColor = brightness == Brightness.dark
         ? colorScheme.surfaceContainerHighest
@@ -58,6 +76,8 @@ abstract class FluffyThemes {
       visualDensity: VisualDensity.standard,
       useMaterial3: true,
       brightness: brightness,
+      scaffoldBackgroundColor:
+          brightness == Brightness.dark ? Colors.black : null,
       colorScheme: colorScheme,
       dividerColor: dividerColor,
       segmentedButtonTheme: SegmentedButtonThemeData(
