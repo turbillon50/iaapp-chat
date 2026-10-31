@@ -41,7 +41,10 @@ Future<void> connectToHomeserverFlow(
     final regLink = homeserverData.regLink;
     final supportsSso = loginFlows.any((flow) => flow.type == 'm.login.sso');
 
-    if ((kIsWeb || PlatformInfos.isLinux) &&
+    final isPinnedIAappServer = !signUp &&
+        homeserverInput == AppSettings.presetHomeserver.value &&
+        homeserverInput == 'vchat.vforge.site';
+    if ((kIsWeb || PlatformInfos.isLinux) && !isPinnedIAappServer &&
         (supportsSso || authMetadata != null || (signUp && regLink != null))) {
       if (!context.mounted) return;
       final consent = await showOkCancelAlertDialog(
