@@ -3,5 +3,7 @@
   "defaultHomeserver": "vchat.vforge.site",
   "colorSchemeSeedInt": 4290427578,
   "website": "https://iaapp.live",
-  "welcomeText": ""
+  "welcomeText": "",
+  "presetHomeserver": "vchat.vforge.site",
+  "enableMatrixNativeOIDC": false
 }
