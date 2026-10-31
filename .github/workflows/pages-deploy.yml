@@ -1,0 +1,41 @@
+name: Publicar IA.app CHAT — web real
+on:
+  push:
+    branches: [main]
+    paths: ['client/**', '.github/workflows/pages-deploy.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: iaapp-chat-pages
+  cancel-in-progress: true
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Resolver dependencias
+        working-directory: client
+        run: flutter pub get
+      - name: Compilar cliente de mensajería
+        working-directory: client
+        run: flutter build web --release --base-href /iaapp-chat/
+      - name: Verificar contenido
+        run: test -s client/build/web/index.html && test -s client/build/web/flutter_bootstrap.js && test -s client/build/web/manifest.json
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: client/build/web
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
