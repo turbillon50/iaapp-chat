@@ -21,11 +21,13 @@ jobs:
       - name: Resolve packages
         working-directory: client
         run: flutter pub get
+      - name: Verify pinned E2EE and image runtime assets
+        run: sha256sum -c client/RUNTIME_ASSETS.sha256
       - name: Build actual Flutter web app
         working-directory: client
         run: flutter build web --release --base-href /iaapp/
       - name: Verify output
-        run: test -f client/build/web/index.html && test -f client/build/web/flutter_bootstrap.js
+        run: test -f client/build/web/index.html && test -f client/build/web/flutter_bootstrap.js && test -s client/build/web/Imaging.js && test -s client/build/web/assets/assets/vodozemac/0.8.1/vodozemac_bindings_dart.js
       - uses: actions/upload-artifact@v4
         with:
           name: iaapp-chat-flutter-web
