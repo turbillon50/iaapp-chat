@@ -9,7 +9,6 @@ import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/utils/platform_infos.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:particles_network/particles_network.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class LoginScaffold extends StatelessWidget {
@@ -42,25 +41,9 @@ class LoginScaffold extends StatelessWidget {
           );
         }
         return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                theme.colorScheme.surfaceContainerLow,
-                theme.colorScheme.surfaceContainer,
-                theme.colorScheme.surfaceContainerHighest,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
+          color: theme.colorScheme.surface,
           child: Stack(
             children: [
-              if (!MediaQuery.disableAnimationsOf(context))
-                ParticleNetwork(
-                  maxSpeed: 0.25,
-                  particleColor: theme.colorScheme.primary,
-                  lineColor: theme.colorScheme.secondary,
-                ),
               Column(
                 children: [
                   const SizedBox(height: 16),
