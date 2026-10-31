@@ -43,7 +43,7 @@ Future<void> connectToHomeserverFlow(
 
     final isPinnedIAappServer = !signUp &&
         homeserverInput == AppSettings.presetHomeserver.value &&
-        homeserverInput == 'vchat.vforge.site';
+        homeserverInput == 'chat.iaapp.live';
     if ((kIsWeb || PlatformInfos.isLinux) && !isPinnedIAappServer &&
         (supportsSso || authMetadata != null || (signUp && regLink != null))) {
       if (!context.mounted) return;

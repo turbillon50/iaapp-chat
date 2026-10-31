@@ -1,9 +1,9 @@
 {
   "applicationName": "IA.app CHAT",
-  "defaultHomeserver": "vchat.vforge.site",
+  "defaultHomeserver": "chat.iaapp.live",
   "colorSchemeSeedInt": 4290427578,
   "website": "https://iaapp.live",
   "welcomeText": "",
-  "presetHomeserver": "vchat.vforge.site",
+  "presetHomeserver": "chat.iaapp.live",
   "enableMatrixNativeOIDC": false
 }
